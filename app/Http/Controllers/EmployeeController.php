@@ -38,20 +38,31 @@ class EmployeeController extends Controller
         $employee_type = $request->input(('actual_type'));
         $tmp = new Employee();
 
-        if ($employee_type == 'admin_room_911')
+        $testing = new Employee();
+        $testing = $testing->get($employee_id);
+
+        $flag = "";
+
+        if ($employee_type == 'true')
         {
-            $tmp->updateById($employee_id, null, null, null, null, 'regular');
+            $tmp->updateById($employee_id, null, null, null, null, null, 'false');
+            $flag = "Changed to 0";
         }
         else
         {
-            $tmp->updateById($employee_id, null, null, null, null, 'admin_room_911');
+            $tmp->updateById($employee_id, null, null, null, null, null, 'true');
+            $flag = "Changed to 1";
         }
 
-        
+        $tmp = $tmp->get($employee_id);
 
         return response()->json([
             'employee_id' => $employee_id,
-            'employee_type' => $employee_type
+            'employee_type' => $employee_type,
+            'before' => $testing->permission,
+            'updated tmp permission' => $tmp->permission,
+            'tmp type' => $tmp->type,
+            'flag' => $flag
         ]);
         
     }
@@ -74,11 +85,15 @@ class EmployeeController extends Controller
         $employeeDepartmentId = $request->input('department_id');
         $employeeType = $request->input('type');
         $employeePassword = $request->input('password');
+        $employeePermission = $request->input('permission');
 
         $tmp = new Employee();
-        $tmp->create($employeeFirstName, $employeeLastName, $employeeDepartmentId, $employeeType, $employeePassword);
+        $tmp->create($employeeFirstName, $employeeLastName, $employeeDepartmentId, $employeeType, $employeePassword, $employeePermission);
 
-        return response()->json(['message' => 'Employee successfully created']);
+        return response()->json([
+            'message' => 'Employee successfully created',
+            'tmp' => $tmp->toArray()
+    ]);
 
     }
 
@@ -89,9 +104,10 @@ class EmployeeController extends Controller
         $employeeLastName = $request->input('lastName');
         $employeeDepartmentId = $request->input('department_id');
         $employeeType = $request->input('type');
+        $employeePermission = $request->input('permission');
 
         $tmp = new Employee();
-        $tmp->updateById($employee_id, $employeeFirstName, $employeeLastName, $employeeDepartmentId, null, $employeeType);
+        $tmp->updateById($employee_id, $employeeFirstName, $employeeLastName, $employeeDepartmentId, null, $employeeType, $employeePermission);
 
         return response()->json(['message' => 'Employee successfully updated']);
 

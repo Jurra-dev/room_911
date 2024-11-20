@@ -69,12 +69,12 @@
               <td>{{ getDepartmentName(employee.department_id) }}</td>
               <td>{{ employee.totalaccess }}</td>
               <td>
-                <button class="btn btn-sm btn-info" @click="goToEditEmployee(employee.id)">Update</button>
-                <button class="btn btn-sm btn-warning" @click="changeType(employee.id, employee.type)">
-                  {{ employee.type === 'admin_room_911' ? 'Disable' : 'Enable' }}
+                <button class="btn btn-sm btn-info p-1" @click="goToEditEmployee(employee.id)">Update</button>
+                <button class="btn btn-sm btn-warning p-1" @click="changeType(employee.id, employee.permission)">
+                  {{ employee.permission === 'true' ? 'Disable' : 'Enable' }}
                 </button>
-                <button class="btn btn-sm btn-primary" @click="goToAccessHistory(employee.id)">History</button>
-                <button class="btn btn-sm btn-danger" @click="deleteEmployee(employee.id)" >Delete</button>
+                <button class="btn btn-sm btn-primary p-1" @click="goToAccessHistory(employee.id)">History</button>
+                <button class="btn btn-sm btn-danger p-1" @click="deleteEmployee(employee.id)" >Delete</button>
               </td>
             </tr>
           </tbody>
@@ -138,18 +138,19 @@
                 console.log(rawArray);
                 for (let i = 1; i < rawArray.length; i++){
 
-                    if(rawArray[i].length === 5){
+                    if(rawArray[i].length === 6){
 
                         const response = await axios.post('/api/createemployee', {
                             password : rawArray[i][2],
                             firstName : rawArray[i][0],
                             lastName : rawArray[i][1],
                             department_id : rawArray[i][3],
-                            type : rawArray[i][4].replace(/\r$/, '')
+                            permission : rawArray[i][4],
+                            type : rawArray[i][5].replace(/\r$/, '')
                         });
 
                         // console.log("HEY")
-                        // console.log(response.data)
+                        console.log(response.data)
                     }
 
                 }
@@ -242,7 +243,7 @@
             async changeType(employee_id, employee_type) {
 
                 console.log(employee_id)
-                console.log(employee_type)
+                console.log(typeof employee_type)
 
                 const response = await axios.put('/api/changetype', 
                 {
@@ -254,6 +255,7 @@
                 );
                 await this.getEmployees()
 
+                console.log(employee_type);
                 console.log(response);
             },
 

@@ -22,7 +22,8 @@ class Employee extends Authenticatable
         'password',
         'department',
         'totalaccess',
-        'type'
+        'type',
+        'permission'
     ];
 
 
@@ -45,7 +46,12 @@ class Employee extends Authenticatable
         return $this->type === 'admin_room_911';
     }
 
-    public function create($firstname, $lastname, $department_id, $type, $password)
+    public function hasPermission()
+    {
+        return $this->permission === 'true';
+    }
+
+    public function create($firstname, $lastname, $department_id, $type, $password, $permission)
     {
         $newemp = new Employee();
         $newemp->firstname = $firstname;
@@ -54,6 +60,7 @@ class Employee extends Authenticatable
         $newemp->totalaccess = 0;
         $newemp->type = $type;
         $newemp->password = $password;
+        $newemp->permission = $permission;
 
         $newemp->save();
         return $newemp->id;
@@ -109,7 +116,7 @@ class Employee extends Authenticatable
         return $query->get(['employees.*']); // Execute the query and return the results
     }
 
-    public function updateById($id, $firstname = null, $lastname = null, $department_id = null, $totalaccess = null, $type = null, $password = null)
+    public function updateById($id, $firstname = null, $lastname = null, $department_id = null, $totalaccess = null, $type = null, $permission = null, $password = null)
     {
         $to_edit = $this->get($id);
 
@@ -143,10 +150,15 @@ class Employee extends Authenticatable
             $to_edit->password = $password;
         }
 
+        if (!empty($permission))
+        {
+            $to_edit->permission = $permission;
+        }
+
         $to_edit->save();
     }
 
-    public function updateFields($firstname = null, $lastname = null, $department_id = null, $totalaccess = null, $type = null, $password = null)
+    public function updateFields($firstname = null, $lastname = null, $department_id = null, $totalaccess = null, $permission = null, $password = null)
     {
 
         if (!empty($firstname))
@@ -169,9 +181,9 @@ class Employee extends Authenticatable
             $this->totalaccess = $totalaccess;
         }
 
-        if (!empty($type))
+        if (!empty($permission))
         {
-            $this->type = $type;
+            $this->$permission = $permission;
         }
 
         if (!empty($password))

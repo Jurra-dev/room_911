@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignid('department_id')->constrained()->onDelete('cascade');     //Employee's department in the departments table
             $table->integer('totalaccess');    //Employee's successful accesses count
             $table->string('type');            //Employee type
+            $table->string('permission');      //Employee's permission
             //$table->timestamps();
         });
 

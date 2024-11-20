@@ -51,7 +51,7 @@ class AttemptController extends Controller
         $attempt = new Attempt();
         $attempt->create($employeeId); //Registers a new Access attempt using the ID provided
 
-        if ($temporalEmp && $temporalEmp->hasAccess()) //checks if the given Employee has access to Room_911
+        if ($temporalEmp && $temporalEmp->hasPermission()) //checks if the given Employee has access to Room_911
         {
             $temporalEmp->regSuccessfulAttempt();
             return response()->json(['message' => 'Access granted']);

@@ -38,6 +38,15 @@
                     </select>
                 </div>
 
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Employee's permission level</label>
+                    <select v-model="permission" class="form-select">
+                        <option value="">Give or deny access to Room 911</option>
+                        <option value="true">Give access</option>
+                        <option value="false">Deny access</option>
+                    </select>
+                </div>
+
                 <div class="d-grid">
                     <button v-on:click="send_employee()" type="button" class="btn btn-primary">Create Employee</button>
                 </div>
@@ -69,7 +78,8 @@
                 lastName: "",
                 department_id: "",
                 type: "", 
-                departments: []
+                departments: [],
+                permission: ""
             }
         },
 
@@ -82,7 +92,8 @@
                     firstName : this.firstName,
                     lastName : this.lastName,
                     department_id : this.department_id,
-                    type : this.type
+                    type : this.type,
+                    permission: this.permission
                 });
 
                 console.log(response)
@@ -93,6 +104,7 @@
                 this.lastName = "";
                 this.department_id = "";
                 this.type = "";
+                this.permission = "";
 
 
 
